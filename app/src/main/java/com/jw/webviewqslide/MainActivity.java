@@ -39,7 +39,19 @@ public class MainActivity extends FloatableActivity {
 
 
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState )
+    {
+        super.onSaveInstanceState(outState);
+        mWebView.saveState(outState);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        mWebView.restoreState(savedInstanceState);
+    }
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
