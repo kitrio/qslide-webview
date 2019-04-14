@@ -18,14 +18,14 @@
         <ImageButton
             android:id="@+id/button_qslide"
             android:layout_width="203dp"
-            android:layout_height="52dp"
-            app:srcCompat="@drawable/ic_launcher_background" />
+            android:layout_height="30dp"
+            />
 
         <ImageButton
             android:id="@+id/button_close"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/btn_dialog" />
+            />
     </LinearLayout>
 
     <WebView

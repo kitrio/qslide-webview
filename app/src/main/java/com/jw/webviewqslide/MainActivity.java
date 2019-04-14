@@ -1,28 +1,123 @@
 package com.jw.webviewqslide;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageButton;
+import android.widget.Toast;
+import android.content.res.Configuration;
 
 import com.lge.app.floating.FloatableActivity;
+import com.lge.app.floating.FloatingWindow;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends FloatableActivity {
 
     private WebView mWebView;
     private WebSettings mWebSetting;
+    private ImageButton qslideButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWebView = findViewById(R.id.webViewMain);
-        //mWebView = (WebView) findViewById(R.id.webViewMain);
+        qslideButton = (ImageButton) findViewById(R.id.button_qslide);
+        mWebView = (WebView) findViewById(R.id.webViewMain);
         mWebView.setWebViewClient(new WebViewClient());
         mWebSetting = mWebView.getSettings();
         mWebSetting.setJavaScriptEnabled(true);
 
         mWebView.loadUrl("https://m.naver.com");
+
+        qslideButton.setOnTouchListener(qListener);
+
+
+    }
+
+    View.OnTouchListener qListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            boolean floatingmode = isInFloatingMode();  		// test if application is in floating window mode
+
+            if (event.getAction() == MotionEvent.ACTION_DOWN ) {
+                //qslideButton.setBackgroundResource(R.drawable.back_pressed); // setting dingy background for the button when pressed
+                Toast.makeText(MainActivity.this, "touch", Toast.LENGTH_SHORT).show();
+                if(floatingmode) {
+                    //qslideButton.setImageResource(R.drawable.floating_btn_fullscreen_normal); // if in floating mode then change button image
+                } else {
+                    //qslideButton.setImageResource(R.drawable.ic_menu_floating_app_pressed);  // else normal image for full screen mode
+                }
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //qslideButton.setBackgroundResource(R.drawable.);  // setting normal background for the button when released
+                if(floatingmode) {
+                    // close the floating window and return to full screen mode (true parameter)
+                    getFloatingWindow().close(true);
+                } else {
+//                    boolean useOverlay = true;//mUseOverlayCheckbox.isChecked();
+//                    boolean useOverlappingTitle = true;//mUseOverlappingTitleCheckbox.isChecked();
+//                    boolean isResizable = true;//mIsResizableCheckbox.isChecked();
+
+                    // switch to the floating window mode
+                    //switchToFloatingMode(useOverlay, useOverlappingTitle, isResizable, null);
+
+                    switchToFloatingMode();
+
+                }
+                return true;
+            }
+            return false;
+        }
+    };
+
+    // This is called when the floating window becomes visible to the user.
+    @Override
+    public void onAttachedToFloatingWindow(FloatingWindow w) {
+        Log.d(TAG,"onAttachedToFloatingWindow.");
+        /* all resources should be reinitialized once again
+         * if you set new layout for the floating mode setContentViewForFloatingMode()*/
+        qslideButton = (ImageButton)findViewById(R.id.button_qslide);
+
+        // and also listeners a should be added once again to the buttons in floating mode
+        qslideButton.setOnTouchListener(qListener);
+
+        FloatingWindow.LayoutParams mParams = w.getLayoutParams();
+        w.setSize(700,1000);
+        // set an onUpdateListener to limit the width of the floating window
+        w.setOnUpdateListener(new FloatingWindow.DefaultOnUpdateListener() {
+
+
+            public void onResizeFinished(FloatingWindow window, int width, int height)
+            {
+
+//                mParams.minWidthWeight = 0.5f;
+//                mParams.minHeightWeight = 1f;
+                //  mParams.resizeOption = FloatingWindow.ResizeOption.PROPORTIONAL;
+                if( width <= 600)
+                    window.setSize(600,850);//window.setSize(1000, height);
+//                Intent intent = getIntent();
+//                intent.putExtra("posX", window.getLayoutParams().width);
+//                intent.putExtra("posY", window.getLayoutParams().height);
+            }
+        });
+    }
+    // This is called when the floating window is closed.
+    @Override
+    public boolean onDetachedFromFloatingWindow(FloatingWindow w, boolean isReturningToFullScreen) {
+        Log.d(TAG,"onDetachedFromFloatingWindow. Returning to Fullscreen: " + isReturningToFullScreen);
+
+        //set the last position of the floating window when the window is closing
+        Intent intent = getIntent();
+        intent.putExtra("posX", w.getLayoutParams().x);
+        intent.putExtra("posY", w.getLayoutParams().y);
+
+        return true;
     }
 
 
