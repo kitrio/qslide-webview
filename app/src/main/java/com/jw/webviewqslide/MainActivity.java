@@ -3,11 +3,13 @@ package com.jw.webviewqslide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.content.res.Configuration;
@@ -22,11 +24,12 @@ public class MainActivity extends FloatableActivity {
     private WebView mWebView;
     private WebSettings mWebSetting;
     private ImageButton qslideButton;
+    private EditText etAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        etAddress = (EditText)findViewById(R.id.etAddress);
         qslideButton = (ImageButton) findViewById(R.id.button_qslide);
         mWebView = (WebView) findViewById(R.id.webViewMain);
         mWebView.setWebViewClient(new WebViewClient());
@@ -37,8 +40,21 @@ public class MainActivity extends FloatableActivity {
 
         qslideButton.setOnTouchListener(qListener);
 
+        etAddress.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //Enter key Action
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    Toast.makeText(MainActivity.this, "touch", Toast.LENGTH_SHORT).show();
+                    mWebView.loadUrl("https://"+etAddress.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState )
     {
@@ -52,6 +68,7 @@ public class MainActivity extends FloatableActivity {
         super.onRestoreInstanceState(savedInstanceState);
         mWebView.restoreState(savedInstanceState);
     }
+    
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
