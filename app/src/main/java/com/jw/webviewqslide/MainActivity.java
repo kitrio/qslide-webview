@@ -1,6 +1,5 @@
 package com.jw.webviewqslide;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -11,7 +10,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 import android.content.res.Configuration;
 
 import com.lge.app.floating.FloatableActivity;
@@ -62,8 +60,6 @@ public class MainActivity extends FloatableActivity {
                 if(mWebView.canGoBack()){
                     mWebView.goBack();
                     Log.d("button","webview back");
-                }else{
-
                 }
             }
         });
@@ -116,7 +112,7 @@ public class MainActivity extends FloatableActivity {
         // and also listeners a should be added once again to the buttons in floating mode
         qslideButton.setOnTouchListener(qListener);
 
-        FloatingWindow.LayoutParams mParams = w.getLayoutParams();
+        //FloatingWindow.LayoutParams mParams = w.getLayoutParams();
         w.setSize(700,1000);
         // set an onUpdateListener to limit the width of the floating window
 
@@ -126,10 +122,10 @@ public class MainActivity extends FloatableActivity {
     public boolean onDetachedFromFloatingWindow(FloatingWindow w, boolean isReturningToFullScreen) {
         Log.d(TAG,"onDetachedFromFloatingWindow. Returning to Fullscreen: " + isReturningToFullScreen);
 
-        //set the last position of the floating window when the window is closing
-        Intent intent = getIntent();
-        intent.putExtra("posX", w.getLayoutParams().x);
-        intent.putExtra("posY", w.getLayoutParams().y);
+//        //set the last position of the floating window when the window is closing
+//        Intent intent = getIntent();
+//        intent.putExtra("posX", w.getLayoutParams().x);
+//        intent.putExtra("posY", w.getLayoutParams().y);
 
         return true;
     }
