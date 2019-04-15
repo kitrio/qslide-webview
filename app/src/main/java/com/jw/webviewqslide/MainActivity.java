@@ -69,22 +69,6 @@ public class MainActivity extends FloatableActivity {
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState )
-    {
-        super.onSaveInstanceState(outState);
-        mWebView.saveState(outState);
-        Log.d("InstanceState","saveState");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        super.onRestoreInstanceState(savedInstanceState);
-        mWebView.restoreState(savedInstanceState);
-        Log.d("InstanceState","restoreState");
-    }
-
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -111,7 +95,7 @@ public class MainActivity extends FloatableActivity {
 
                     // switch to the floating window mode
                     //switchToFloatingMode(useOverlay, useOverlappingTitle, isResizable, null);
-
+                    setDontFinishOnFloatingMode(true);
                     switchToFloatingMode();
 
                 }
@@ -148,6 +132,32 @@ public class MainActivity extends FloatableActivity {
         intent.putExtra("posY", w.getLayoutParams().y);
 
         return true;
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!isSwitchingToFloatingMode()) {
+            // release application specific resources here
+            // only when application isn't switching to floating window mode
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (!isSwitchingToFloatingMode()) {
+            // release application specific resources here
+            // only when application isn't switching to floating window mode
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!isSwitchingToFloatingMode()) {
+            // release application specific resources here
+            // only when application isn't switching to floating window mode
+        }
     }
 
 
