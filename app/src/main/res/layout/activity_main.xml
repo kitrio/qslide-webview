@@ -23,15 +23,17 @@
             android:id="@+id/button_qslide"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_margin="2dp"
-            android:src="?attr/actionModeSelectAllDrawable" />
+
+            android:layout_marginStart="14dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_fullscreen_exit_black_24dp" />
 
         <ImageButton
             android:id="@+id/button_wvBack"
             android:layout_width="48dp"
             android:layout_height="32dp"
             android:layout_marginBottom="0dp"
-
+            android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
             android:src="?attr/actionModeCloseDrawable" />
 
@@ -41,6 +43,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:ems="10"
+            android:hint="@string/edit_address"
             android:inputType="textPersonName" />
 
         <ImageButton
