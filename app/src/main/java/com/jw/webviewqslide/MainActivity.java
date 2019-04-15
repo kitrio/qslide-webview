@@ -49,7 +49,7 @@ public class MainActivity extends FloatableActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 //Enter key Action
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    Toast.makeText(MainActivity.this, "touch", Toast.LENGTH_SHORT).show();
+                    Log.d("button","web enterkey");
                     mWebView.loadUrl("https://"+etAddress.getText().toString());
                     return true;
                 }
@@ -61,6 +61,7 @@ public class MainActivity extends FloatableActivity {
             public void onClick(View view) {
                 if(mWebView.canGoBack()){
                     mWebView.goBack();
+                    Log.d("button","webview back");
                 }else{
 
                 }
@@ -73,6 +74,7 @@ public class MainActivity extends FloatableActivity {
     {
         super.onSaveInstanceState(outState);
         mWebView.saveState(outState);
+        Log.d("InstanceState","saveState");
     }
 
     @Override
@@ -80,6 +82,7 @@ public class MainActivity extends FloatableActivity {
     {
         super.onRestoreInstanceState(savedInstanceState);
         mWebView.restoreState(savedInstanceState);
+        Log.d("InstanceState","restoreState");
     }
 
     View.OnTouchListener qListener = new View.OnTouchListener() {
@@ -89,7 +92,7 @@ public class MainActivity extends FloatableActivity {
 
             if (event.getAction() == MotionEvent.ACTION_DOWN ) {
                 //qslideButton.setBackgroundResource(R.drawable.back_pressed); // setting dingy background for the button when pressed
-                Toast.makeText(MainActivity.this, "touch", Toast.LENGTH_SHORT).show();
+
                 if(floatingmode) {
                     //qslideButton.setImageResource(R.drawable.floating_btn_fullscreen_normal); // if in floating mode then change button image
                 } else {
@@ -132,22 +135,7 @@ public class MainActivity extends FloatableActivity {
         FloatingWindow.LayoutParams mParams = w.getLayoutParams();
         w.setSize(700,1000);
         // set an onUpdateListener to limit the width of the floating window
-        w.setOnUpdateListener(new FloatingWindow.DefaultOnUpdateListener() {
 
-
-            public void onResizeFinished(FloatingWindow window, int width, int height)
-            {
-
-//                mParams.minWidthWeight = 0.5f;
-//                mParams.minHeightWeight = 1f;
-                //  mParams.resizeOption = FloatingWindow.ResizeOption.PROPORTIONAL;
-                if( width <= 600)
-                    window.setSize(600,850);//window.setSize(1000, height);
-//                Intent intent = getIntent();
-//                intent.putExtra("posX", window.getLayoutParams().width);
-//                intent.putExtra("posY", window.getLayoutParams().height);
-            }
-        });
     }
     // This is called when the floating window is closed.
     @Override
