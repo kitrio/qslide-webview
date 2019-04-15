@@ -23,7 +23,9 @@ public class MainActivity extends FloatableActivity {
 
     private WebView mWebView;
     private WebSettings mWebSetting;
+
     private ImageButton qslideButton;
+    private ImageButton webViewBackButton;
     private EditText etAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class MainActivity extends FloatableActivity {
         setContentView(R.layout.activity_main);
         etAddress = (EditText)findViewById(R.id.etAddress);
         qslideButton = (ImageButton) findViewById(R.id.button_qslide);
+        webViewBackButton = findViewById(R.id.button_wvBack);
+
         mWebView = (WebView) findViewById(R.id.webViewMain);
         mWebView.setWebViewClient(new WebViewClient());
         mWebSetting = mWebView.getSettings();
@@ -52,7 +56,16 @@ public class MainActivity extends FloatableActivity {
                 return false;
             }
         });
+        webViewBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mWebView.canGoBack()){
+                    mWebView.goBack();
+                }else{
 
+                }
+            }
+        });
     }
 
     @Override
@@ -68,7 +81,7 @@ public class MainActivity extends FloatableActivity {
         super.onRestoreInstanceState(savedInstanceState);
         mWebView.restoreState(savedInstanceState);
     }
-    
+
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
