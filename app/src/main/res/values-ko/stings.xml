@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Q웹뷰</string>
+    <string name="edit_address">주소입력</string>
+</resources>

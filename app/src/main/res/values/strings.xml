@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">WebViewQslide</string>
+    <string name="app_name">Q WebView</string>
+    <string name="edit_address">type web address</string>
 </resources>
