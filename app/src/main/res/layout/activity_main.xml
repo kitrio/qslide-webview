@@ -11,18 +11,18 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageButton
             android:id="@+id/button_qslide"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
 
             android:layout_marginStart="14dp"
             android:background="@android:color/transparent"
@@ -31,16 +31,18 @@
         <ImageButton
             android:id="@+id/button_wvBack"
             android:layout_width="48dp"
-            android:layout_height="32dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/button_qslide"
             android:background="@android:color/transparent"
             android:src="?attr/actionModeCloseDrawable" />
 
         <EditText
             android:id="@+id/etAddress"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/button_wvBack"
             android:background="@android:color/transparent"
             android:ems="10"
             android:hint="@string/edit_address"
@@ -49,8 +51,13 @@
         <ImageButton
             android:id="@+id/button_close"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/checkbox_off_background" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="@id/etAddress"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:src="@android:drawable/checkbox_off_background"
+            />
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
