@@ -1,16 +1,19 @@
-package com.jw.webviewqslide;
+package com.jw.qslideview;
 
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.content.res.Configuration;
 
 import com.lge.app.floating.FloatableActivity;
 import com.lge.app.floating.FloatingWindow;
@@ -25,6 +28,7 @@ public class MainActivity extends FloatableActivity {
     private ImageButton qslideButton;
     private ImageButton webViewBackButton;
     private EditText etAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +38,7 @@ public class MainActivity extends FloatableActivity {
         webViewBackButton = findViewById(R.id.button_wvBack);
 
         mWebView = (WebView) findViewById(R.id.webViewMain);
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new myWebClient());
         mWebSetting = mWebView.getSettings();
         mWebSetting.setJavaScriptEnabled(true);
 
@@ -48,7 +52,12 @@ public class MainActivity extends FloatableActivity {
                 //Enter key Action
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     Log.d("button","web enterkey");
-                    mWebView.loadUrl("https://"+etAddress.getText().toString());
+                    String url = etAddress.getText().toString();
+                    if(!url.startsWith("http://") && !url.startsWith("https://")){
+                        url = "http://"+url;
+                    }
+                    mWebView.loadUrl(url);
+                    etAddress.setText(mWebView.getUrl());
                     return true;
                 }
                 return false;
@@ -63,8 +72,31 @@ public class MainActivity extends FloatableActivity {
                 }
             }
         });
+
     }
 
+    public class myWebClient extends WebViewClient
+    {
+//        @Override
+//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//            // TODO Auto-generated method stub
+//            super.onPageStarted(view, url, favicon);
+//        }
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            String url = request.getUrl().toString();
+            if (url.startsWith("tel:")){
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
+                return  true;
+            }
+            if (url.startsWith("mailto:")) {
+                startActivity(new Intent(Intent.EXTRA_EMAIL, Uri.parse(url)));
+                return true;
+            }
+            return false;
+        }
+
+    }
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
