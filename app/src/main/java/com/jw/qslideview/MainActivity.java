@@ -40,6 +40,7 @@ public class MainActivity extends FloatableActivity {
         mWebView = (WebView) findViewById(R.id.webViewMain);
         mWebView.setWebViewClient(new myWebClient());
         mWebSetting = mWebView.getSettings();
+        mWebSetting.setDomStorageEnabled(true);
         mWebSetting.setJavaScriptEnabled(true);
 
         mWebView.loadUrl("https://m.naver.com");
