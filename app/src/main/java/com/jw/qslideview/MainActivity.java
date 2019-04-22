@@ -1,6 +1,7 @@
 package com.jw.qslideview;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,6 +20,7 @@ import android.widget.ImageButton;
 
 import com.lge.app.floating.FloatableActivity;
 import com.lge.app.floating.FloatingWindow;
+
 
 import static android.content.ContentValues.TAG;
 
@@ -29,6 +33,8 @@ public class MainActivity extends FloatableActivity {
     private ImageButton webViewBackButton;
     private EditText etAddress;
 
+    private ValueCallback<Uri[]> mfilePathCallback;
+    public  static final int INPUT_FILE_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +45,12 @@ public class MainActivity extends FloatableActivity {
 
         mWebView = (WebView) findViewById(R.id.webViewMain);
         mWebView.setWebViewClient(new myWebClient());
+        mWebView.setWebChromeClient(new myWebChromeClient());
         mWebSetting = mWebView.getSettings();
+
         mWebSetting.setDomStorageEnabled(true);
         mWebSetting.setJavaScriptEnabled(true);
-
+        mWebSetting.setAllowFileAccess(true);
         mWebView.loadUrl("https://m.naver.com");
 
         qslideButton.setOnTouchListener(qListener);
@@ -98,6 +106,37 @@ public class MainActivity extends FloatableActivity {
         }
 
     }
+    public class myWebChromeClient extends WebChromeClient{
+
+        @Override
+        public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback,   WebChromeClient.FileChooserParams fileChooserParams) {
+            if(mfilePathCallback != null){
+                mfilePathCallback.onReceiveValue(null);
+                mfilePathCallback = null;
+            }
+            mfilePathCallback = filePathCallback ;
+            Intent contentIntent = fileChooserParams.createIntent();
+            try {
+                startActivityForResult(contentIntent,INPUT_FILE_REQUEST_CODE);
+                Log.d("Activity","startActivity");
+            } catch (ActivityNotFoundException e){
+                mfilePathCallback = null;
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data){
+            if (requestCode == INPUT_FILE_REQUEST_CODE) {
+                if (mfilePathCallback == null) return;
+                mfilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
+                mfilePathCallback = null;
+            }
+        }
+
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -122,7 +161,6 @@ public class MainActivity extends FloatableActivity {
 //                    boolean useOverlappingTitle = true;//mUseOverlappingTitleCheckbox.isChecked();
 //                    boolean isResizable = true;//mIsResizableCheckbox.isChecked();
 
-                    // switch to the floating window mode
                     //switchToFloatingMode(useOverlay, useOverlappingTitle, isResizable, null);
                     setDontFinishOnFloatingMode(true);
                     switchToFloatingMode();
@@ -162,6 +200,7 @@ public class MainActivity extends FloatableActivity {
 
         return true;
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -188,6 +227,5 @@ public class MainActivity extends FloatableActivity {
             // only when application isn't switching to floating window mode
         }
     }
-
 
 }
