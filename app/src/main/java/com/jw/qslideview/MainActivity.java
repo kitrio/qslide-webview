@@ -1,55 +1,71 @@
 package com.jw.qslideview;
 
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.lge.app.floating.FloatableActivity;
 import com.lge.app.floating.FloatingWindow;
 
 
-import static android.content.ContentValues.TAG;
 
 public class MainActivity extends FloatableActivity {
 
     private WebView mWebView;
     private WebSettings mWebSetting;
-
     private ImageButton qslideButton;
     private ImageButton webViewBackButton;
+    private ImageButton mainMenuButton;
     private EditText etAddress;
-
     private ValueCallback<Uri[]> mfilePathCallback;
     public  static final int INPUT_FILE_REQUEST_CODE = 1;
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         etAddress = (EditText)findViewById(R.id.etAddress);
         qslideButton = (ImageButton) findViewById(R.id.button_qslide);
-        webViewBackButton = findViewById(R.id.button_wvBack);
+        webViewBackButton = (ImageButton) findViewById(R.id.button_wvBack);
+        mainMenuButton = (ImageButton) findViewById(R.id.button_mainMenu);
 
         mWebView = (WebView) findViewById(R.id.webViewMain);
+        mWebView.setWebChromeClient(new myWebChromeClient());//this = webview
         mWebView.setWebViewClient(new myWebClient());
-        mWebView.setWebChromeClient(new myWebChromeClient());
-        mWebSetting = mWebView.getSettings();
 
-        mWebSetting.setDomStorageEnabled(true);
+        mWebSetting = mWebView.getSettings();
         mWebSetting.setJavaScriptEnabled(true);
+        mWebSetting.setJavaScriptCanOpenWindowsAutomatically(true);
+        mWebSetting.setSupportMultipleWindows(true);
+        mWebSetting.setDomStorageEnabled(true);
+        mWebSetting.setUseWideViewPort(true);
         mWebSetting.setAllowFileAccess(true);
         mWebView.loadUrl("https://m.naver.com");
 
@@ -58,12 +74,11 @@ public class MainActivity extends FloatableActivity {
         etAddress.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                //Enter key Action
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     Log.d("button","web enterkey");
                     String url = etAddress.getText().toString();
                     if(!url.startsWith("http://") && !url.startsWith("https://")){
-                        url = "http://"+url;
+                        url = "https://"+url;
                     }
                     mWebView.loadUrl(url);
                     etAddress.setText(mWebView.getUrl());
@@ -82,6 +97,23 @@ public class MainActivity extends FloatableActivity {
             }
         });
 
+        mainMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popMenu = new PopupMenu(
+                        getApplicationContext(), v);
+                getMenuInflater().inflate(R.menu.main_menu, popMenu.getMenu());
+                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        return false;
+                    }
+                });
+                popMenu.show();
+            }
+        });
+
     }
 
     public class myWebClient extends WebViewClient
@@ -89,7 +121,7 @@ public class MainActivity extends FloatableActivity {
 //        @Override
 //        public void onPageStarted(WebView view, String url, Bitmap favicon) {
 //            // TODO Auto-generated method stub
-//            super.onPageStarted(view, url, favicon);
+//             super.onPageStarted(view, url, favicon);
 //        }
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -107,7 +139,6 @@ public class MainActivity extends FloatableActivity {
 
     }
     public class myWebChromeClient extends WebChromeClient{
-
         @Override
         public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback,   WebChromeClient.FileChooserParams fileChooserParams) {
             if(mfilePathCallback != null){
@@ -118,13 +149,68 @@ public class MainActivity extends FloatableActivity {
             Intent contentIntent = fileChooserParams.createIntent();
             try {
                 startActivityForResult(contentIntent,INPUT_FILE_REQUEST_CODE);
-                Log.d("Activity","startActivity");
             } catch (ActivityNotFoundException e){
                 mfilePathCallback = null;
                 return false;
             }
             return true;
         }
+
+//        @Override
+//        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+//            return super.onJsAlert(view, url, message, result);
+//        }
+
+        @Override
+        public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+
+//            new AlertDialog.Builder(view.getContext()).setMessage(message)
+//                    .setPositiveButton(android.R.string.ok,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    result.confirm();
+//                                }
+//                            })
+//                    .setNegativeButton(android.R.string.cancel,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    result.cancel();
+//                                }
+//                            })
+//                    .create()
+//                    .show();
+//            return true;
+
+            mContext = getWindow().getContext();
+            final Dialog dialog = new Dialog(mContext);
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                dialog.setContentView(R.layout.custom_dialog);
+                final TextView tvTitle = (TextView) dialog.findViewById(R.id.titleAlert);
+                final Button btnOK = dialog.findViewById(R.id.button_ok);
+                final Button btnCancel = dialog.findViewById(R.id.button_cancel);
+                tvTitle.setText(message);
+                btnOK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        result.confirm();
+                        dialog.dismiss();
+                    }
+                });
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        result.cancel();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setCancelable(false);
+                dialog.show();
+
+                return  true;
+        }
+
 
     }
 
@@ -136,6 +222,12 @@ public class MainActivity extends FloatableActivity {
                 mfilePathCallback = null;
             }
         }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
     View.OnTouchListener qListener = new View.OnTouchListener() {
         @Override
@@ -175,23 +267,43 @@ public class MainActivity extends FloatableActivity {
     // This is called when the floating window becomes visible to the user.
     @Override
     public void onAttachedToFloatingWindow(FloatingWindow w) {
-        Log.d(TAG,"onAttachedToFloatingWindow.");
+
+        Log.d("WindowFlow","onAttachedToFloatingWindow.");
         /* all resources should be reinitialized once again
          * if you set new layout for the floating mode setContentViewForFloatingMode()*/
+        //mContext = w.getContentView().getContext();
         qslideButton = (ImageButton)findViewById(R.id.button_qslide);
+        mContext = this.getFloatingWindow().getContentView().getContext();
 
         // and also listeners a should be added once again to the buttons in floating mode
         qslideButton.setOnTouchListener(qListener);
 
-        //FloatingWindow.LayoutParams mParams = w.getLayoutParams();
         w.setSize(700,1000);
+
+
+        w.setOnUpdateListener(new FloatingWindow.DefaultOnUpdateListener() {
+
+            @Override
+            public void onResizeFinished(FloatingWindow window, int width,
+                                         int height) {
+                DisplayMetrics disp = getApplicationContext().getResources().getDisplayMetrics();
+                int deviceWidth = disp.widthPixels;
+                int deviceHeight = disp.heightPixels;
+
+                //resizedWidthRatio = (float) width / deviceWidth;
+                //((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+                //mLunarView.setResizeRatio(resizedWidthRatio);
+            }
+        });
         // set an onUpdateListener to limit the width of the floating window
+
+
 
     }
     // This is called when the floating window is closed.
     @Override
     public boolean onDetachedFromFloatingWindow(FloatingWindow w, boolean isReturningToFullScreen) {
-        Log.d(TAG,"onDetachedFromFloatingWindow. Returning to Fullscreen: " + isReturningToFullScreen);
+        Log.d("WindowFlow","onDetachedFromFloatingWindow. Returning to Fullscreen: " + isReturningToFullScreen);
 
 //        //set the last position of the floating window when the window is closing
 //        Intent intent = getIntent();
