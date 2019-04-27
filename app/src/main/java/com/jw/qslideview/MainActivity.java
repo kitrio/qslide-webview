@@ -116,6 +116,7 @@ public class MainActivity extends FloatableActivity {
 
     }
 
+
     public class myWebClient extends WebViewClient
     {
 //        @Override
@@ -227,6 +228,14 @@ public class MainActivity extends FloatableActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
+    }
+    @Override
+    public void onBackPressed() {
+        if(mWebView.canGoBack()){
+            mWebView.goBack();
+        }else{
+            super.onBackPressed();
+        }
     }
 
     View.OnTouchListener qListener = new View.OnTouchListener() {
