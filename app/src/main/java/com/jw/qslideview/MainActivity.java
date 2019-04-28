@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -188,6 +190,8 @@ public class MainActivity extends FloatableActivity {
             final Dialog dialog = new Dialog(mContext);
                 dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
                 dialog.setContentView(R.layout.custom_dialog);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 final TextView tvTitle = (TextView) dialog.findViewById(R.id.titleAlert);
                 final Button btnOK = dialog.findViewById(R.id.button_ok);
                 final Button btnCancel = dialog.findViewById(R.id.button_cancel);
@@ -211,8 +215,6 @@ public class MainActivity extends FloatableActivity {
 
                 return  true;
         }
-
-
     }
 
         @Override
