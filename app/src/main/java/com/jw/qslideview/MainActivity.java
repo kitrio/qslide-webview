@@ -34,7 +34,6 @@ import com.lge.app.floating.FloatableActivity;
 import com.lge.app.floating.FloatingWindow;
 
 
-
 public class MainActivity extends FloatableActivity {
 
     private WebView mWebView;
@@ -51,6 +50,7 @@ public class MainActivity extends FloatableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         etAddress = (EditText)findViewById(R.id.etAddress);
         qslideButton = (ImageButton) findViewById(R.id.button_qslide);
         webViewBackButton = (ImageButton) findViewById(R.id.button_wvBack);
@@ -149,7 +149,7 @@ public class MainActivity extends FloatableActivity {
             mfilePathCallback = filePathCallback ;
             Intent contentIntent = fileChooserParams.createIntent();
             try {
-                startActivityForResult(contentIntent,INPUT_FILE_REQUEST_CODE);
+                MainActivity.this.startActivityForResult(contentIntent,INPUT_FILE_REQUEST_CODE);
             } catch (ActivityNotFoundException e){
                 mfilePathCallback = null;
                 return false;
@@ -219,9 +219,11 @@ public class MainActivity extends FloatableActivity {
         protected void onActivityResult(int requestCode, int resultCode, Intent data){
             if (requestCode == INPUT_FILE_REQUEST_CODE) {
                 if (mfilePathCallback == null) return;
+
                 mfilePathCallback.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data));
                 mfilePathCallback = null;
-            }
+            }super.onActivityResult(requestCode,INPUT_FILE_REQUEST_CODE,data);
+            onStop();
         }
 
     @Override
@@ -321,10 +323,21 @@ public class MainActivity extends FloatableActivity {
 
         return true;
     }
+    @Override
+    public void switchToFloatingMode() {
+        if (onStartedAsFloatingMode()) {
+            setDontFinishOnFloatingMode(true);
+        }
+        super.switchToFloatingMode();
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if(onStartedAsFloatingMode()){
+            Log.d("isStartedFloat","isfloat");
+            //setDontFinishOnFloatingMode(true);
+        }
         if (!isSwitchingToFloatingMode()) {
             // release application specific resources here
             // only when application isn't switching to floating window mode
@@ -343,7 +356,7 @@ public class MainActivity extends FloatableActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!isSwitchingToFloatingMode()) {
+        if (isSwitchingToFloatingMode()) {
             // release application specific resources here
             // only when application isn't switching to floating window mode
         }
