@@ -69,6 +69,7 @@ public class MainActivity extends FloatableActivity {
         mWebSetting.setDomStorageEnabled(true);
         mWebSetting.setUseWideViewPort(true);
         mWebSetting.setAllowFileAccess(true);
+        mWebSetting.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         mWebView.loadUrl("https://m.naver.com");
 
         qslideButton.setOnTouchListener(qListener);
@@ -191,7 +192,6 @@ public class MainActivity extends FloatableActivity {
                 dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
                 dialog.setContentView(R.layout.custom_dialog);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                 final TextView tvTitle = (TextView) dialog.findViewById(R.id.titleAlert);
                 final Button btnOK = dialog.findViewById(R.id.button_ok);
                 final Button btnCancel = dialog.findViewById(R.id.button_cancel);
@@ -291,7 +291,7 @@ public class MainActivity extends FloatableActivity {
         // and also listeners a should be added once again to the buttons in floating mode
         qslideButton.setOnTouchListener(qListener);
 
-        w.setSize(700,1000);
+        w.setSize(700,1100);
 
 
         w.setOnUpdateListener(new FloatingWindow.DefaultOnUpdateListener() {
