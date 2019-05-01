@@ -103,17 +103,37 @@ public class MainActivity extends FloatableActivity {
         mainMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popMenu = new PopupMenu(
-                        getApplicationContext(), v);
-                getMenuInflater().inflate(R.menu.main_menu, popMenu.getMenu());
-                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-
-                        return false;
-                    }
-                });
-                popMenu.show();
+//                PopupMenu popMenu = new PopupMenu(
+//                        getApplicationContext(), v);
+//
+//                getMenuInflater().inflate(R.menu.main_menu, popMenu.getMenu());
+//                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem menuItem) {
+//                        switch (menuItem.getItemId()) {
+//                            case R.id.item_G:
+//                                mWebView.loadUrl("https://www.google.com/search?q="+etAddress.getText());
+//                                break;
+//
+//                            case R.id.item_N:
+//                                mWebView.loadUrl("https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query="+etAddress.getText());
+//                                break;
+//
+//                            case R.id.item_reload:
+//                                mWebView.reload();
+//                                break;
+//
+//
+//                            default:
+//                                break;
+//                        }
+//
+//                        return false;
+//                    }
+//                });
+//
+//                popMenu.show();
+                mWebView.loadUrl("https://www.google.com/search?q="+etAddress.getText());
             }
         });
 
