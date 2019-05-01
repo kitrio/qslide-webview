@@ -11,10 +11,10 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="42dp"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -26,38 +26,44 @@
 
             android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_fullscreen_exit_black_24dp" />
+            android:src="@drawable/ic_fullscreen_exit_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/button_wvBack"
             android:layout_width="46dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_toRightOf="@id/button_qslide"
+            android:layout_toEndOf="@id/button_qslide"
             android:background="@android:color/transparent"
-            android:src="?attr/actionModeCloseDrawable" />
+            android:src="?attr/actionModeCloseDrawable"
+            app:layout_constraintStart_toEndOf="@id/button_qslide"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/etAddress"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
-            android:layout_toRightOf="@id/button_wvBack"
+            android:layout_toEndOf="@id/button_wvBack"
             android:background="@android:color/transparent"
             android:ems="10"
             android:hint="@string/edit_address"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@id/button_wvBack"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/button_mainMenu"
-            android:layout_width="wrap_content"
+            android:layout_width="42dp"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="@id/etAddress"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="14dp"
             android:background="@android:color/transparent"
-            android:src="@android:drawable/checkbox_off_background"
-            android:visibility="invisible" />
-    </RelativeLayout>
+            android:src="@android:drawable/ic_menu_search"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
