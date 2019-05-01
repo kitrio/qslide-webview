@@ -189,7 +189,7 @@ public class MainActivity extends FloatableActivity {
 
             mContext = getWindow().getContext();
             final Dialog dialog = new Dialog(mContext);
-                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
                 dialog.setContentView(R.layout.custom_dialog);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 final TextView tvTitle = (TextView) dialog.findViewById(R.id.titleAlert);
@@ -280,7 +280,6 @@ public class MainActivity extends FloatableActivity {
     // This is called when the floating window becomes visible to the user.
     @Override
     public void onAttachedToFloatingWindow(FloatingWindow w) {
-
         Log.d("WindowFlow","onAttachedToFloatingWindow.");
         /* all resources should be reinitialized once again
          * if you set new layout for the floating mode setContentViewForFloatingMode()*/
@@ -331,6 +330,16 @@ public class MainActivity extends FloatableActivity {
             setDontFinishOnFloatingMode(true);
         }
         super.switchToFloatingMode();
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        // Floating Composer
+        if (intent.getBooleanExtra("com.lge.app.floating.returnFromFloating", false)) {
+            // When floating composer is changing to normal mode,
+            // dummy intent come.
+            Log.d("Intent", "onNewIntent Dummy");
+            return;
+        }
     }
 
     @Override
