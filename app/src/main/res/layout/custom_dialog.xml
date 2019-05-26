@@ -56,19 +56,19 @@
             android:layout_weight="1"
             android:visibility="invisible" />
         <Button
-            android:id="@+id/button_ok"
+            android:id="@+id/button_cancel"
             style="?attr/buttonBarNegativeButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="확인"
+            android:text="@string/alertmsg_cancel"
             android:textSize="16sp"
             android:textColor="#000000"/>
         <Button
-            android:id="@+id/button_cancel"
+            android:id="@+id/button_ok"
             style="?attr/buttonBarPositiveButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="취소"
+            android:text="@string/alertmsg_ok"
             android:textSize="16sp"
             android:textColor="#000000"/>
     </com.android.internal.widget.ButtonBarLayout>
