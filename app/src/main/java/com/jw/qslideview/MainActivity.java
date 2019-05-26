@@ -158,6 +158,15 @@ public class MainActivity extends FloatableActivity {
                 startActivity(new Intent(Intent.EXTRA_EMAIL, Uri.parse(url)));
                 return true;
             }
+            if (url.startsWith("intent://www.google.com/maps")) {
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                //mapIntent.setPackage("com.google.android.apps.maps");
+                mapIntent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+                return true;
+            }
             return false;
         }
 
@@ -209,7 +218,7 @@ public class MainActivity extends FloatableActivity {
 
             mContext = getWindow().getContext();
             final Dialog dialog = new Dialog(mContext);
-                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
                 dialog.setContentView(R.layout.custom_dialog);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 final TextView tvTitle = (TextView) dialog.findViewById(R.id.titleAlert);
