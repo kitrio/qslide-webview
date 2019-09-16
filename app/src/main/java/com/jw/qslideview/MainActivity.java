@@ -123,7 +123,6 @@ public class MainActivity extends FloatableActivity {
 //                                mWebView.reload();
 //                                break;
 //
-//
 //                            default:
 //                                break;
 //                        }
@@ -131,14 +130,12 @@ public class MainActivity extends FloatableActivity {
 //                        return false;
 //                    }
 //                });
-//
 //                popMenu.show();
                 mWebView.loadUrl("https://www.google.com/search?q="+etAddress.getText());
             }
         });
 
     }
-
 
     public class myWebClient extends WebViewClient
     {
@@ -160,7 +157,6 @@ public class MainActivity extends FloatableActivity {
             }
             if (url.startsWith("intent://www.google.com/maps")) {
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                //mapIntent.setPackage("com.google.android.apps.maps");
                 mapIntent.setClassName("com.google.android.apps.maps","com.google.android.maps.MapsActivity");
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(mapIntent);
@@ -169,8 +165,8 @@ public class MainActivity extends FloatableActivity {
             }
             return false;
         }
-
     }
+
     public class myWebChromeClient extends WebChromeClient{
         @Override
         public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback,   WebChromeClient.FileChooserParams fileChooserParams) {
@@ -188,11 +184,6 @@ public class MainActivity extends FloatableActivity {
             }
             return true;
         }
-
-//        @Override
-//        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-//            return super.onJsAlert(view, url, message, result);
-//        }
 
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
@@ -320,8 +311,6 @@ public class MainActivity extends FloatableActivity {
         qslideButton.setOnTouchListener(qListener);
 
         w.setSize(700,1100);
-
-
         w.setOnUpdateListener(new FloatingWindow.DefaultOnUpdateListener() {
 
             @Override
@@ -338,8 +327,6 @@ public class MainActivity extends FloatableActivity {
         });
         // set an onUpdateListener to limit the width of the floating window
 
-
-
     }
     // This is called when the floating window is closed.
     @Override
@@ -350,7 +337,6 @@ public class MainActivity extends FloatableActivity {
 //        Intent intent = getIntent();
 //        intent.putExtra("posX", w.getLayoutParams().x);
 //        intent.putExtra("posY", w.getLayoutParams().y);
-
         return true;
     }
     @Override
