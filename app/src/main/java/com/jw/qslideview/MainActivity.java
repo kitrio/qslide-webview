@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.DisplayMetrics;
@@ -45,8 +46,10 @@ public class MainActivity extends FloatableActivity {
     private ImageButton mainMenuButton;
     private EditText etAddress;
     private ValueCallback<Uri[]> mfilePathCallback;
-    public  static final int INPUT_FILE_REQUEST_CODE = 1;
     private Context mContext;
+
+    public  static final int INPUT_FILE_REQUEST_CODE = 1;
+    public  static final int sdkVersion = Build.VERSION.SDK_INT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,11 +142,11 @@ public class MainActivity extends FloatableActivity {
 
     public class myWebClient extends WebViewClient
     {
-//        @Override
-//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//            // TODO Auto-generated method stub
-//             super.onPageStarted(view, url, favicon);
-//        }
+//       @Override
+//       public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//           // TODO Auto-generated method stub
+//            super.onPageStarted(view, url, favicon);
+//       }
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
@@ -187,29 +190,13 @@ public class MainActivity extends FloatableActivity {
 
         @Override
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-
-//            new AlertDialog.Builder(view.getContext()).setMessage(message)
-//                    .setPositiveButton(android.R.string.ok,
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialogInterface, int i) {
-//                                    result.confirm();
-//                                }
-//                            })
-//                    .setNegativeButton(android.R.string.cancel,
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialogInterface, int i) {
-//                                    result.cancel();
-//                                }
-//                            })
-//                    .create()
-//                    .show();
-//            return true;
-
-            mContext = getWindow().getContext();
-            final Dialog dialog = new Dialog(mContext);
-                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                mContext = getWindow().getContext();
+                final Dialog dialog = new Dialog(mContext);
+                if (sdkVersion <= 25) {
+                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_PHONE);
+                }else {
+                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                }
                 dialog.setContentView(R.layout.custom_dialog);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 final TextView tvTitle = (TextView) dialog.findViewById(R.id.titleAlert);
